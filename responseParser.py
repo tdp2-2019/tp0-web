@@ -16,6 +16,7 @@ def parse_books_list(books_list_response):
             if 'pdf' in item['accessInfo']:
                 book['pdf'] = item['accessInfo']['pdf']
             response['items'].append(book)
+    response['items'] = sorted(response['items'], key=lambda k: k['title'])
     return json.dumps(response)
     
 # TODO
