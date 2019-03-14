@@ -4,10 +4,8 @@ BOOKS_LIST_VI_KEYS = ['title', 'authors', 'categories', 'description', 'imageLin
 
 def parse_books_list(books_list_response):
     books_list_response = json.loads(books_list_response)
-    response = {}
-    response['totalItems'] = books_list_response['totalItems']
-    response['items'] = []
-    if response['totalItems'] > 0:
+    items = []
+    if books_list_response['totalItems'] > 0:
         for item in books_list_response['items']:
             book = { key: item['volumeInfo'][key] for key in BOOKS_LIST_VI_KEYS if key in item['volumeInfo'] }
             book['id'] = item['id']
@@ -15,9 +13,9 @@ def parse_books_list(books_list_response):
                 book['epub'] = item['accessInfo']['epub']
             if 'pdf' in item['accessInfo']:
                 book['pdf'] = item['accessInfo']['pdf']
-            response['items'].append(book)
-    response['items'] = sorted(response['items'], key=lambda k: k['title'])
-    return json.dumps(response)
+            items.append(book)
+    items = sorted(items, key=lambda k: k['title'])
+    return json.dumps(items)
     
 # TODO
 def parse_book_detail(book_detail):
