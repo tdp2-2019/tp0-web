@@ -20,7 +20,11 @@ def getBookInfo(id):
     response = requests.get(BOOKS_API_URLBASE + 'volumes/' + id)
     responseParser.parse_book_detail(response.content)
     return('TO_DO')
-    
+
+@app.after_request
+def add_header(response):
+    response.cache_control.max_age = 300
+    return response
     
 if __name__ == "__main__":
     app.run(port=8080)
