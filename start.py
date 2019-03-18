@@ -12,14 +12,18 @@ def searchBooks():
     search_words = request.args.get('search')
     querystring = str(search_words).replace(' ', '+')
     response = requests.get(BOOKS_API_URLBASE + 'volumes?q=' + querystring)
-    response.raise_for_status()
-    return responseParser.parse_books_list(response.content)
+    if response.status_code == 200:
+        return responseParser.parse_books_list(response.content)
+    
+    return response.content, response.status_code
 
 @app.route("/v1/books/<id>", methods = ['GET'])
 def getBookInfo(id):
     response = requests.get(BOOKS_API_URLBASE + 'volumes/' + id)
-    responseParser.parse_book_detail(response.content)
-    return('TO_DO')
+    if response.status_code == 200:
+        return responseParser.parse_book_detail(response.content)
+    
+    return response.content, response.status_code
 
 @app.after_request
 def add_header(response):

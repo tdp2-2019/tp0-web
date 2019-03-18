@@ -17,8 +17,11 @@ def parse_books_list(books_list_response):
     items = sorted(items, key=lambda k: k['title'])
     return json.dumps(items)
     
-# TODO
 def parse_book_detail(book_detail):
     book_detail = json.loads(book_detail)
-    book = {}
+    book = { key: book_detail['volumeInfo'][key] for key in BOOKS_LIST_VI_KEYS if key in book_detail['volumeInfo']}
+    if 'epub' in book_detail['accessInfo']:
+        book['epub'] = book_detail['accessInfo']['epub']
+    if 'pdf' in book_detail['accessInfo']:
+        book['pdf'] = book_detail['accessInfo']['pdf']
     return json.dumps(book)
